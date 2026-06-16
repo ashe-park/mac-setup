@@ -1,0 +1,30 @@
+# === macOS 전용 시스템 쓰레기 파일 차단 ===
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# 아이콘 및 썸네일 캐시 파일
+Icon
+._*
+
+# 외장하드 연결 시 생기는 폴더들 차단
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# 디렉토리 서비스 관련 파일
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+
+# === 보안 및 개인 비밀번호 파일 차단 ===
+.env
+*.env
+config.secret.sh
