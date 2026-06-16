@@ -64,6 +64,21 @@ echo "------------------------------------------"
 install_brew_cask "anthropic-claude"     # Claude 데스크톱
 install_brew_cask "obsidian"             # Obsidian 노트 앱
 install_brew_cask "rectangle"            # Rectangle 화면 분할 앱
+# --- Rectangle 설정 자동 복사 코드 ---
+echo "⚙️ Rectangle 단축키 설정을 적용합니다..."
+mkdir -p ~/Library/Preferences
+# 1. 현재 실행 중인 스크립트의 URL 주소를 역추적하여 깃허브 아이디 자동 추출
+if [ -n "$BASH_SOURCE" ]; then
+    # curl 원격 실행 시 주소 파싱
+    GITHUB_USER=$(echo "$BASH_SOURCE" | cut -d'/' -f4)
+else
+    # 예외 상황 대비 기본값 세팅용 (추출 실패 시 기본 계정명 입력)
+    GITHUB_USER="본인의_실제_깃허브_아이디"
+fi
+# 2. 추출한 변수($GITHUB_USER)를 주소에 자동으로 주입하여 다운로드
+curl -fsSL "https://githubusercontent.com/{GITHUB_USER}/mac-setup/main/com.knollsoft.Rectangle.plist" -o ~/Library/Preferences/com.knollsoft.Rectangle.plist
+defaults read com.knollsoft.Rectangle &> /dev/null
+
 install_brew_cask "slack"                # 슬랙
 install_brew_cask "notion"               # 노션
 install_brew_cask "dockdoor"             # Dockdoor (창 실시간 미리보기)
