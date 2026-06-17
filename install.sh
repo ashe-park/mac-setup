@@ -83,6 +83,23 @@ install_brew_cask "slack"                # 슬랙
 install_brew_cask "notion"               # 노션
 install_brew_cask "dockdoor"             # Dockdoor (창 실시간 미리보기)
 install_brew_cask "launchie"             # Launchie (런치패드 대체 무료 앱)
+# --- Launchie '확인필요' 신규 앱 가로채기 폴더 시스템 등록 ---
+echo "⚙️ 신규 설치 앱 자동 분류 및 '확인필요' 폴더 시스템을 구성합니다..."
+LAUNCHIE_SUPPORT_DIR="$HOME/Library/Application Support/Launchie"
+AGENT_DIR="$HOME/Library/LaunchAgents"
+mkdir -p "$LAUNCHIE_SUPPORT_DIR"
+mkdir -p "$AGENT_DIR"
+# 1. 깃허브에서 감시 스크립트 다운로드 및 실행 권한 부여
+curl -fsSL "https://githubusercontent.com/{GITHUB_USER}/mac-setup/main/auto_sort_launchie.sh" -o "$LAUNCHIE_SUPPORT_DIR/auto_sort_launchie.sh"
+chmod +x "$LAUNCHIE_SUPPORT_DIR/auto_sort_launchie.sh"
+# 2. 깃허브에서 감시 스케줄러 등록 파일 다운로드 및 유저 경로 수정 주입
+curl -fsSL "https://githubusercontent.com/{GITHUB_USER}/mac-setup/main/com.user.launchiesort.plist" -o "$AGENT_DIR/com.user.launchiesort.plist"
+sed -i '' "s/현재유저/$USER/g" "$AGENT_DIR/com.user.launchiesort.plist"
+# 3. 맥북 백그라운드 시스템에 감시 에이전트 등록 및 강제 가동
+launchctl unload "$AGENT_DIR/com.user.launchiesort.plist" &> /dev/null || true
+launchctl load "$AGENT_DIR/com.user.launchiesort.plist"
+echo "✅ 신규 앱 설치 시 '확인필요' 폴더로 자동 이주하는 백그라운드 트리거 활성화 완료."
+
 install_brew_cask "linearmouse"          # LinearMouse (마우스 가속도 개별 설정)
 
 echo "------------------------------------------"
